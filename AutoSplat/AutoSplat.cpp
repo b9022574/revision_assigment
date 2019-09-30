@@ -100,7 +100,7 @@ int main()
 
 	g_clutBase = _CLUTYPOS(uniqueCLUTs - 1) + 34;
 
-	DrawSegments2Buffer(pSegmentData);
+	DrawSegments2Buffer(pSegmentData, pTIMData);
 	BlitPixels(g_pMapBuffer, BUFX, BUFY, 0, 0, 1024, 1024, 2048);
 
 	// **************************************
@@ -353,7 +353,7 @@ int main()
 		// ***********************************************
 		if (bUpdateSegments == true && theMode == MODE_MAP)
 		{
-			DrawSegments2Buffer(pSegmentData);
+			DrawSegments2Buffer(pSegmentData, pTIMData);
 			BlitPixels(g_pMapBuffer, BUFX, BUFY, xscroll, yscroll, 1024, 1024, 2048);
 
 			DrawRectangle(1300, 3, 260, 20, MakeColor(0, 0, 0), true);
@@ -654,6 +654,9 @@ int CopyTIM2Buffer(int sourcex, int sourcey, int destx, int desty, int rot)
 {
 	// TO DO: Implement this function (see slides)
 
+	Color c = GetPixel(sourcex, sourcey);
+	SetBufferPixel(destx, desty, c);
+
 	return 0;
 }
 
@@ -663,11 +666,12 @@ int CopyTIM2Buffer(int sourcex, int sourcey, int destx, int desty, int rot)
 //				pTIMData - pointer to the array of TIM data storing the textures
 // Notes:		Pulls the TIM data from the display buffer as it is already in the correct bit depth
 //				(32-bit) and copying it automatically propogates any colour changes to the map
-int DrawSegments2Buffer(SEGMENT* pSegments)
+int DrawSegments2Buffer(SEGMENT* pSegments, TIM_FILE* pTIMData)
 {
 	// TO DO: Implement this function (see slides)
 	// Note the code below should copy the TIM at index "tileIndex" to the map grid square "mapIndex" 
-	// CopyTIM2Buffer(_TIMXPOS(tileIndex), _TIMYPOS(tileIndex), _MAPXPOS(mapIndex), _MAPYPOS(mapIndex), tileRot);
+
+	CopyTIM2Buffer(_TIMXPOS(1), _TIMYPOS(1), _MAPXPOS(1), _MAPYPOS(1), 1);
 
 	return 0;
 }
@@ -685,7 +689,7 @@ int SaveDiffusePNG(string &folderPath, SEGMENT* pSegmentData, TIM_FILE* pTIMData
 
 	DrawString(MESSX, MESSY, string("Saving file: ") + fileAndPath, MakeColor(255, 255, 255));
 
-	DrawSegments2Buffer(pSegmentData);
+	DrawSegments2Buffer(pSegmentData, pTIMData);
 
 	int ret = SaveNewBitmap2PNG(g_pMapBuffer, fileAndPath, 2048, 2048);
 
@@ -703,7 +707,7 @@ int SaveDiffusePNG(string &folderPath, SEGMENT* pSegmentData, TIM_FILE* pTIMData
 // Returns:		1 for success
 int SaveChannelPNGs(string &folderPath, SEGMENT* pSegmentData, TIM_FILE* pTIMData )
 {
-	DrawSegments2Buffer(pSegmentData);
+	DrawSegments2Buffer(pSegmentData, pTIMData);
 
 	uint32_t* pChannelBuffer = new uint32_t[2048 * 2048];
 
