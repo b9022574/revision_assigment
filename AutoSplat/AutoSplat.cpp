@@ -678,18 +678,26 @@ int DrawSegments2Buffer(SEGMENT* pSegments, TIM_FILE* pTIMData)
 	// Note the code below should copy the TIM at index "tileIndex" to the map grid square "mapIndex" 
 	const int lenght = 64;
 
-		for (int i = 0; i < lenght; i++) {//Y
-			for (int j = 0; j < lenght; j++) {//X
+		for (int i = 0; i < 16; i++) {//Y
+			for (int j = 0; j < 16; j++) {//X
 
-				int index = j + (i * lenght);
+				for (int y = 0; y < 4; y++) {
+					for (int x = 0; x < 4; x++) {
 
-				CopyTIM2Buffer(_TIMXPOS(pSegments[0].strTilePolyStruct[0].cTileRef),
-		 			_TIMYPOS(pSegments[0].strTilePolyStruct[0].cTileRef),
-					_MAPXPOS(index),
-		  			_MAPYPOS(index),
-					pSegments[0].strTilePolyStruct[0].c.Rot
-				);
+						int poly_index = x + (y * 4);
+						int seg_index = j + (i * 16);
+						//int map_index = x + (i * 64);
+				
+						CopyTIM2Buffer(_TIMXPOS(pSegments[seg_index].strTilePolyStruct[poly_index].cTileRef),
+		 					_TIMYPOS(pSegments[seg_index].strTilePolyStruct[poly_index].cTileRef),
+							_MAPXPOS(map_index),
+		  					_MAPYPOS(map_index),
+							pSegments[seg_index].strTilePolyStruct[poly_index].cRot
+						);
+						
 
+					}
+				}
 			}
 		}
 	
