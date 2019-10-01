@@ -653,9 +653,15 @@ void SetBufferPixel(int x, int y, Color c)
 int CopyTIM2Buffer(int sourcex, int sourcey, int destx, int desty, int rot)
 {
 	// TO DO: Implement this function (see slides)
+	for (int i = 0; i < 32; i++) {
+		for (int j = 0; j < 32; j++) {
+			
+			Color c = GetPixel(sourcex + j, sourcey  + i);
+			SetBufferPixel(destx + j, desty + i, c);
 
-	Color c = GetPixel(sourcex, sourcey);
-	SetBufferPixel(destx, desty, c);
+		}
+		
+	}
 
 	return 0;
 }
@@ -670,9 +676,24 @@ int DrawSegments2Buffer(SEGMENT* pSegments, TIM_FILE* pTIMData)
 {
 	// TO DO: Implement this function (see slides)
 	// Note the code below should copy the TIM at index "tileIndex" to the map grid square "mapIndex" 
+	const int lenght = 64;
 
-	CopyTIM2Buffer(_TIMXPOS(1), _TIMYPOS(1), _MAPXPOS(1), _MAPYPOS(1), 1);
+		for (int i = 0; i < lenght; i++) {//Y
+			for (int j = 0; j < lenght; j++) {//X
 
+				int index = j + (i * lenght);
+
+				CopyTIM2Buffer(_TIMXPOS(pSegments[0].strTilePolyStruct[0].cTileRef),
+		 			_TIMYPOS(pSegments[0].strTilePolyStruct[0].cTileRef),
+					_MAPXPOS(index),
+		  			_MAPYPOS(index),
+					pSegments[0].strTilePolyStruct[0].c.Rot
+				);
+
+			}
+		}
+	
+	
 	return 0;
 }
 
