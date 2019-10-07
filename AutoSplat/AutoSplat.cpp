@@ -652,19 +652,73 @@ void SetBufferPixel(int x, int y, Color c)
 
 int CopyTIM2Buffer(int sourcex, int sourcey, int destx, int desty, int rot)
 {
-	// TO DO: Implement this function (see slides)
+
+	Color c;
+
+	int size = 32;
+
 	for (int i = 0; i < 32; i++) {
 		for (int j = 0; j < 32; j++) {
 			
-			Color c = GetPixel(sourcex + j, sourcey  + i);
-			SetBufferPixel(destx + j, desty + i, c);
+			switch (rot) {
+
+				// Normal
+				case 0:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + j, desty + i, c);
+				break;
+
+				// Flip in X
+				case 1:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + size - j - 1, desty + i, c);
+				break;
+
+				//Rotate 90
+				case 2:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + size - i - 1, desty + j, c);
+				break;
+
+				// Flip in X & Rotate 90
+				case 3:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + size - 1 - i, desty + size - 1 - j, c);
+				break;
+
+				// Rotate 180
+				case 4:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + size - 1 - j, desty + size - 1 - i,  c);
+				break;
+
+				// Flip in Y
+				case 5:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + j, desty + size - i - 1,  c);
+				break;
+
+				// Rotate 270
+				case 6:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + i, desty + size - 1 - j,  c);
+				break;
+
+				// Flip in X & Rotate 270
+				case 7:
+					c = GetPixel(sourcex + j, sourcey + i);
+					SetBufferPixel(destx + i, desty + j ,  c);
+				break;
+	
+			}
 
 		}
-		
+
 	}
 
 	return 0;
 }
+
 
 // Function:	DrawSegments2Buffer
 // Description: Draws a representation of the orginal level to the map display buffer 
